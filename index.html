@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline Exam Practice - UPSC/BPSC/Local Exams</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        header {
+            background: #2d3748;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        header p {
+            opacity: 0.9;
+        }
+        .main-content {
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section h2 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .subject-btn {
+            padding: 15px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        .subject-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .subject-btn.active {
+            background: #48bb78;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .timer {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #e53e3e;
+            padding: 10px 20px;
+            background: #fff5f5;
+            border-radius: 8px;
+        }
+        .quiz-container {
+            background: #f7fafc;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .question {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option {
+            padding: 15px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .option:hover {
+            border-color: #667eea;
+            background: #edf2f7;
+        }
+        .option.selected {
+            border-color: #667eea;
+            background: #edf2f7;
+        }
+        .option.correct {
+            border-color: #48bb78;
+            background: #c6f6d5;
+        }
+        .option.incorrect {
+            border-color: #e53e3e;
+            background: #fed7d7;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+        .btn-secondary {
+            background: #718096;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #4a5568;
+        }
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #38a169;
+        }
+        .results {
+            background: #edf2f7;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .results h2 {
+            font-size: 2em;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+        .score {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .stat-box h3 {
+            color: #718096;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        .stat-box p {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        .hidden {
+            display: none;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .progress {
+            height: 100%;
+            background: #667eea;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Offline Exam Practice</h1>
+            <p>Practice MCQs for UPSC, BPSC, and Local Government Exams</p>
+        </header>
+        
+        <div class="main-content">
+            <!-- Subject Selection -->
+            <div id="subjectSelection" class="section">
+                <h2>Select Subject</h2>
+                <div class="subject-grid">
+                    <button class="subject-btn" onclick="selectSubject('general-knowledge')">General Knowledge</button>
+                    <button class="subject-btn" onclick="selectSubject('history')">History</button>
+                    <button class="subject-btn" onclick="selectSubject('geography')">Geography</button>
+                    <button class="subject-btn" onclick="selectSubject('polity')">Polity</button>
+                    <button class="subject-btn" onclick="selectSubject('economics')">Economics</button>
+                    <button class="subject-btn" onclick="selectSubject('science')">Science</button>
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div id="quizSection" class="section hidden">
+                <div class="controls">
+                    <div>
+                        <span>Question <span id="currentQuestion">1</span> of <span id="totalQuestions">0</span></span>
+                    </div>
+                    <div class="timer" id="timer">⏱️ 00:00</div>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress" id="progressBar"></div>
+                </div>
+                
+                <div class="quiz-container">
+                    <div class="question" id="question"></div>
+                    <div class="options" id="options"></div>
+                </div>
+                
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">← Previous</button>
+                    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Next →</button>
+                    <button class="btn btn-success hidden" id="submitBtn" onclick="submitQuiz()">Submit Quiz</button>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultsSection" class="section hidden">
+                <div class="results">
+                    <h2>🎉 Quiz Completed!</h2>
+                    <div class="score" id="scoreDisplay"></div>
+                    <div class="stats">
+                        <div class="stat-box">
+                            <h3>Correct</h3>
+                            <p id="correctCount" style="color: #48bb78;">0</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3>Incorrect</h3>
+                            <p id="incorrectCount" style="color: #e53e3e;">0</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3>Unanswered</h3>
+                            <p id="unansweredCount" style="color: #718096;">0</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3>Time Taken</h3>
+                            <p id="timeTaken">00:00</p>
+                        </div>
+                    </div>
+                    <div class="nav-buttons" style="justify-content: center; margin-top: 30px;">
+                        <button class="btn btn-primary" onclick="reviewAnswers()">Review Answers</button>
+                        <button class="btn btn-secondary" onclick="restartQuiz()">Try Again</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
